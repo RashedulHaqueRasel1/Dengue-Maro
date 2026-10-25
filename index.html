@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>ডেঙ্গু থাপ্পড় বাজ · Dengue Slap Master</title>
+<meta name="description" content="মশা মারতে কামান লাগে না, একটা থাপ্পড়ই যথেষ্ট! এইডিস মশা থাপ্পড়ে মারুন, ডেঙ্গু সম্পর্কে সচেতন হোন।">
+<meta property="og:title" content="ডেঙ্গু থাপ্পড় বাজ 👋🦟">
+<meta property="og:description" content="মশা মারতে কামান লাগে না, একটা থাপ্পড়ই যথেষ্ট! তুমি কয়টা মারতে পারবা?">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="bn_BD">
+<meta property="og:site_name" content="ডেঙ্গু থাপ্পড় বাজ">
+<!-- after deploying, replace the domain below with your real site address -->
+<meta property="og:url" content="https://dengue-thappor.pages.dev/">
+<meta property="og:image" content="https://dengue-thappor.pages.dev/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ঘুমন্ত মামাকে মশার হাত থেকে বাঁচানোর মজার গেম">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ডেঙ্গু থাপ্পড় বাজ 👋🦟">
+<meta name="twitter:description" content="মশা মারতে কামান লাগে না, একটা থাপ্পড়ই যথেষ্ট!">
+<meta name="twitter:image" content="https://dengue-thappor.pages.dev/og-image.jpg">
+<meta name="theme-color" content="#ffd23f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atma:wght@600;700&family=Mina:wght@400;700&family=Noto+Sans+Bengali:wght@500;700&family=Tiro+Bangla&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+<div id="app">
+  <canvas id="cv"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hud hidden">
+    <div class="hud-row">
+      <div class="score-box"><span class="lbl">থাপ্পড় স্কোর</span><span id="score">০</span></div>
+      <div id="lives" class="lives"></div>
+      <div class="hud-btns">
+        <button id="btnMute" class="icon-btn" aria-label="সাউন্ড">🔊</button>
+        <button id="btnPause" class="icon-btn" aria-label="বিরতি">⏸</button>
+      </div>
+    </div>
+    <div class="hud-row2">
+      <div id="combo" class="combo"></div>
+      <div id="powers" class="powers"></div>
+    </div>
+  </div>
+
+  <div id="banner" class="banner"></div>
+
+  <!-- START -->
+  <section id="scrStart" class="screen">
+    <div class="card start">
+      <div class="kicker">⚠️ জনস্বার্থে প্রচারিত থাপ্পড় ⚠️</div>
+      <div class="hero" aria-hidden="true">
+        <div class="avatar"><img src="img/mama_face.webp" alt=""><span class="zz">z<i>z</i><b>z</b></span></div>
+        <span class="hero-mosq">🦟</span><span class="hero-hand">🖐️</span><span class="hero-boom">ঠাস!</span>
+      </div>
+      <h1 class="title">ডেঙ্গু থাপ্পড় বাজ</h1>
+      <div class="subtitle">DENGUE SLAP MASTER</div>
+      <p class="tagline">মশা মারতে কামান লাগে না,<br>একটা <b>থাপ্পড়ই</b> যথেষ্ট! 👋</p>
+      <button id="btnStart" class="btn btn-big">থাপ্পড় শুরু করেন 👋</button>
+      <div id="bestLine" class="best-line"></div>
+      <ul class="howto">
+        <li><span>👋</span> স্ক্রিনে ট্যাপ করে মশাকে থাপ্পড় মারেন</li>
+        <li><span>😴</span> মামার গায়ে বসে কামড় দিলে ❤️ কমবে, ৩টা গেলে খেলা শেষ</li>
+        <li><span>🔥</span> টানা মারলে কম্বো, পয়েন্ট ×২ ×৩</li>
+        <li><span>🌀🧴⚡🥥</span> পাওয়ার-আপ ধরেন: কয়েল, ক্রিম, ব্যাট, ডাব</li>
+        <li><span>👑</span> মশা সর্দার আসলে ৬ থাপ্পড় লাগবে!</li>
+      </ul>
+      <button id="btnShareStart" class="btn btn-blue btn-sm">📢 বন্ধুদের চ্যালেঞ্জ দিন</button>
+      <div class="foot">💧 জমা পানি ফেলুন, ডেঙ্গু ঠেকান · <a href="#" id="lnkCredits">ক্রেডিট</a></div>
+    </div>
+  </section>
+
+  <!-- PAUSE -->
+  <section id="scrPause" class="screen hidden">
+    <div class="card small">
+      <h2 class="title sm">বিরতি ⏸</h2>
+      <p class="tagline">মশারা অপেক্ষা করছে... 😈</p>
+      <button id="btnResume" class="btn btn-big">আবার থাপ্পড় 👋</button>
+      <button id="btnHome2" class="btn btn-ghost">হোম</button>
+    </div>
+  </section>
+
+  <!-- CREDITS -->
+  <section id="scrCredits" class="screen hidden">
+    <div class="card small">
+      <h2 class="title sm">ক্রেডিট</h2>
+      <p class="credits">সব মিম ভয়েস আর সাউন্ডের কৃতিত্ব মূল নির্মাতাদের।<br><br>ডেঙ্গু তথ্য সাধারণ সচেতনতার জন্য, চিকিৎসার জন্য ডাক্তারের পরামর্শ নিন। স্বাস্থ্য বাতায়ন: <b>১৬২৬৩</b></p>
+      <button id="btnCreditsBack" class="btn btn-ghost">ফিরে যান</button>
+    </div>
+  </section>
+
+  <!-- SHARE -->
+  <section id="scrShare" class="screen hidden">
+    <div class="card share">
+      <h2 class="title sm">শেয়ার করুন 📢</h2>
+      <p class="share-sub">বন্ধুদের চ্যালেঞ্জ দিন, কে বেশি মশা মারতে পারে!</p>
+      <img id="sharePreview" class="share-preview" alt="স্কোর কার্ড">
+      <div class="share-grid">
+        <a id="shFb" class="sh fb" target="_blank" rel="noopener"><span>f</span>ফেসবুক</a>
+        <a id="shWa" class="sh wa" target="_blank" rel="noopener"><span>✆</span>হোয়াটসঅ্যাপ</a>
+        <a id="shMs" class="sh ms" target="_blank" rel="noopener"><span>⚡</span>মেসেঞ্জার</a>
+        <a id="shX" class="sh x" target="_blank" rel="noopener"><span>𝕏</span>এক্স</a>
+        <a id="shTg" class="sh tg" target="_blank" rel="noopener"><span>➤</span>টেলিগ্রাম</a>
+        <button id="shCopy" class="sh cp"><span>🔗</span>লিংক কপি</button>
+        <button id="shDl" class="sh dl"><span>⬇</span>ছবি সেভ</button>
+        <button id="shNative" class="sh nt"><span>📤</span>আরো…</button>
+      </div>
+      <div id="shareToast" class="toast"></div>
+      <button id="btnShareBack" class="btn btn-ghost">ফিরে যান</button>
+    </div>
+  </section>
+
+  <!-- MEME POPUP -->
+  <div id="meme" class="meme" aria-hidden="true"><img alt=""><div class="cap"></div></div>
+
+  <!-- GAME OVER: newspaper -->
+  <section id="scrOver" class="screen hidden">
+    <div class="paper">
+      <div class="mh-top"><span id="ovDate"></span><span>মূল্য: এক থাপ্পড়</span></div>
+      <h2 class="masthead">দৈনিক মশারি</h2>
+      <div class="mh-sub">মশা নয়, সত্য প্রকাশে আপসহীন</div>
+      <div class="breaking">🔴 ব্রেকিং নিউজ</div>
+      <h3 id="ovHeadline" class="headline"></h3>
+      <figure class="news-photo">
+        <img src="img/news_photo.webp" alt="জ্বরে কাতর মামা">
+        <figcaption>ছবি: থাপ্পড়বাজের ব্যর্থতায় জ্বরে কাতর মামা। <i>— নিজস্ব আলোকচিত্রী</i></figcaption>
+      </figure>
+      <div class="score-row">
+        <div class="big-score"><span id="ovScore">০</span><small>পয়েন্ট</small></div>
+        <div id="ovBest" class="best-badge"></div>
+      </div>
+      <div class="stats">
+        <div><b id="stKills">০</b><span>মশা খতম</span></div>
+        <div><b id="stCombo">০</b><span>সর্বোচ্চ কম্বো</span></div>
+        <div><b id="stAcc">০%</b><span>নিশানা</span></div>
+        <div><b id="stTime">০</b><span>সেকেন্ড টিকেছেন</span></div>
+      </div>
+      <p id="ovSatire" class="satire"></p>
+      <div class="tip"><b>🩺 জনস্বার্থে:</b> <span id="ovTip"></span></div>
+      <div class="btns">
+        <button id="btnAgain" class="btn">আবার থাপ্পড় 👋</button>
+        <button id="btnShare" class="btn btn-blue">শেয়ার 📤</button>
+        <button id="btnHome" class="btn btn-ghost">হোম</button>
+      </div>
+    </div>
+  </section>
+</div>
+<script type="module" src="js/main.js?v=7"></script>
+</body>
+</html>

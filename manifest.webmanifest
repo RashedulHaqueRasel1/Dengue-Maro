@@ -1,0 +1,10 @@
+{
+  "name": "ডেঙ্গু থাপ্পড় বাজ",
+  "short_name": "থাপ্পড় বাজ",
+  "start_url": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#2b1d0e",
+  "theme_color": "#ffd23f",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}
