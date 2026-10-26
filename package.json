@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev --port 8787",
-    "deploy": "wrangler pages deploy"
+    "dev": "npm run build && wrangler pages dev --port 8787",
+    "build": "wrangler pages functions build --compatibility-flags nodejs_compat --compatibility-date 2026-09-01 --outdir public/_worker.js",
+    "deploy": "npm run build && wrangler pages deploy"
   },
   "repository": {
     "type": "git",

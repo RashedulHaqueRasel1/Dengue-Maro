@@ -1,6 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Cloudflare Pages project: static game in ./public, API in ./functions
+  // Cloudflare Pages project: static game in ./public, API in ./functions.
+  // `npm run build` pre-bundles the API into public/_worker.js with wrangler 4, because the
+  // older wrangler in the Pages build image mis-bundles the mongodb driver.
   "name": "dengue-maro",
   "pages_build_output_dir": "./public",
   "compatibility_date": "2026-09-01",
