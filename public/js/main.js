@@ -1053,3 +1053,28 @@ requestAnimationFrame(frame);
 if (location.search.includes('debug')) window.__dsm = { G, S, update, resume, showMeme, makeMeme, get L() { return L; } };
 // redraw background once Bangla fonts are ready (calendar / tag text)
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { BG = art.renderBackground(L, DPR); });
+
+// ------------------------------------------------------------------ visit counter
+// Counts one visit per browser session (refreshes don't inflate it); hides itself if the API is down.
+(async function visitCounter() {
+  const line = $('visitLine'), out = $('visitCount');
+  const fmt = n => bn(Math.round(n).toLocaleString('en-IN'));
+  let total = null;
+  try {
+    let counted = false;
+    try { counted = sessionStorage.getItem('dsm_visit') === '1'; } catch (e) {}
+    const res = await fetch(counted ? '/api/stats' : '/api/visit', { method: counted ? 'GET' : 'POST' });
+    if (!res.ok) return;
+    total = (await res.json()).total;
+    try { sessionStorage.setItem('dsm_visit', '1'); } catch (e) {}
+  } catch (e) { return; }
+  if (typeof total !== 'number') return;
+  line.classList.remove('hidden');
+  const t0 = performance.now(), dur = 1200;
+  const step = now => {
+    const p = Math.min(1, (now - t0) / dur);
+    out.textContent = fmt(total * (1 - Math.pow(1 - p, 3)));
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+})();

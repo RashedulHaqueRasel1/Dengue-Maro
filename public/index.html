@@ -10,16 +10,16 @@
 <meta property="og:type" content="website">
 <meta property="og:locale" content="bn_BD">
 <meta property="og:site_name" content="ডেঙ্গু থাপ্পড় বাজ">
-<!-- after deploying, replace the domain below with your real site address -->
-<meta property="og:url" content="https://dengue-thappor.pages.dev/">
-<meta property="og:image" content="https://dengue-thappor.pages.dev/og-image.jpg">
+<!-- live site address; update if you move to a custom domain -->
+<meta property="og:url" content="https://dengue-maro.rashedulhaque-bdcalling.workers.dev/">
+<meta property="og:image" content="https://dengue-maro.rashedulhaque-bdcalling.workers.dev/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="ঘুমন্ত মামাকে মশার হাত থেকে বাঁচানোর মজার গেম">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ডেঙ্গু থাপ্পড় বাজ 👋🦟">
 <meta name="twitter:description" content="মশা মারতে কামান লাগে না, একটা থাপ্পড়ই যথেষ্ট!">
-<meta name="twitter:image" content="https://dengue-thappor.pages.dev/og-image.jpg">
+<meta name="twitter:image" content="https://dengue-maro.rashedulhaque-bdcalling.workers.dev/og-image.jpg">
 <meta name="theme-color" content="#ffd23f">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atma:wght@600;700&family=Mina:wght@400;700&family=Noto+Sans+Bengali:wght@500;700&family=Tiro+Bangla&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=6">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <div id="app">
@@ -56,22 +56,26 @@
     <div class="card start">
       <div class="kicker">⚠️ জনস্বার্থে প্রচারিত থাপ্পড় ⚠️</div>
       <div class="hero" aria-hidden="true">
-        <div class="avatar"><img src="img/mama_face.webp" alt=""><span class="zz">z<i>z</i><b>z</b></span></div>
+        <div class="hero-glow"></div>
+        <!-- drop the photo at img/dipjol.jpg; falls back to the uncle's photo until then -->
+        <div class="avatar"><img src="img/dipjol.jpg" onerror="this.onerror=null;this.src='img/mama_face.webp';this.classList.add('fallback')" alt=""><span class="zz">z<i>z</i><b>z</b></span></div>
         <span class="hero-mosq">🦟</span><span class="hero-hand">🖐️</span><span class="hero-boom">ঠাস!</span>
       </div>
       <h1 class="title">ডেঙ্গু থাপ্পড় বাজ</h1>
       <div class="subtitle">DENGUE SLAP MASTER</div>
       <p class="tagline">মশা মারতে কামান লাগে না,<br>একটা <b>থাপ্পড়ই</b> যথেষ্ট! 👋</p>
-      <button id="btnStart" class="btn btn-big">থাপ্পড় শুরু করেন 👋</button>
+      <button id="btnStart" class="btn btn-big btn-block">থাপ্পড় শুরু করেন 👋</button>
       <div id="bestLine" class="best-line"></div>
+      <div id="visitLine" class="visit-line hidden"><span class="dot"></span>মোট ভিজিট <b id="visitCount">০</b></div>
+      <div class="howto-head"><span>কিভাবে খেলবেন</span></div>
       <ul class="howto">
-        <li><span>👋</span> স্ক্রিনে ট্যাপ করে মশাকে থাপ্পড় মারেন</li>
-        <li><span>😴</span> মামার গায়ে বসে কামড় দিলে ❤️ কমবে, ৩টা গেলে খেলা শেষ</li>
-        <li><span>🔥</span> টানা মারলে কম্বো, পয়েন্ট ×২ ×৩</li>
-        <li><span>🌀🧴⚡🥥</span> পাওয়ার-আপ ধরেন: কয়েল, ক্রিম, ব্যাট, ডাব</li>
-        <li><span>👑</span> মশা সর্দার আসলে ৬ থাপ্পড় লাগবে!</li>
+        <li><span class="ico">👋</span><p><b>ট্যাপ = থাপ্পড়</b>মশার উপর ট্যাপ করেন</p></li>
+        <li><span class="ico">❤️</span><p><b>৩টা জীবন</b>মামাকে কামড়ালে কমবে</p></li>
+        <li><span class="ico">🔥</span><p><b>কম্বো</b>টানা মারলে ×২ ×৩</p></li>
+        <li><span class="ico">👑</span><p><b>মশা সর্দার</b>৬ থাপ্পড় লাগবে!</p></li>
+        <li class="wide"><span class="ico">🌀</span><p><b>পাওয়ার-আপ</b>🌀 কয়েল · 🧴 ক্রিম · ⚡ ব্যাট · 🥥 ডাব</p></li>
       </ul>
-      <button id="btnShareStart" class="btn btn-blue btn-sm">📢 বন্ধুদের চ্যালেঞ্জ দিন</button>
+      <button id="btnShareStart" class="btn btn-blue btn-sm btn-block">📢 বন্ধুদের চ্যালেঞ্জ দিন</button>
       <div class="foot">💧 জমা পানি ফেলুন, ডেঙ্গু ঠেকান · <a href="#" id="lnkCredits">ক্রেডিট</a></div>
     </div>
   </section>
@@ -151,6 +155,6 @@
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=7"></script>
+<script type="module" src="js/main.js?v=8"></script>
 </body>
 </html>

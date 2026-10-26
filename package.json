@@ -1,0 +1,20 @@
+{
+  "name": "dengue-maro",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RashedulHaqueRasel1/Dengue-Maro.git"
+  },
+  "dependencies": {
+    "mongodb": "^7.7.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.152.0"
+  }
+}
