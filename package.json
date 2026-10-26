@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "dev": "wrangler pages dev --port 8787",
+    "deploy": "wrangler pages deploy"
   },
   "repository": {
     "type": "git",
