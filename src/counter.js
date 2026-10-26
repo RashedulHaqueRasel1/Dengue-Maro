@@ -51,11 +51,27 @@ export async function readTotal(ctx) {
   return withDb(ctx, async db => (await db.collection('stats').findOne({ _id: 'visits' }))?.total || 0);
 }
 
-export async function handle(fn) {
+// Non-secret hints about why the connection failed: error type/message with any credentials
+// masked, plus the *shape* of MONGODB_URI (never its value).
+function diagnose(err, uri = '') {
+  const mask = s => String(s || '').replace(/mongodb(\+srv)?:\/\/[^\s@]*@/gi, 'mongodb$1://***@');
+  return {
+    reason: err?.name || 'Error',
+    detail: mask(err?.message).slice(0, 300),
+    uri: {
+      set: !!uri,
+      scheme: (uri.match(/^[a-z+]+:\/\//i) || ['invalid'])[0],
+      hasPlaceholder: /<db_(username|password)>/.test(uri),
+      hasWhitespaceOrQuotes: /^\s|\s$|^["']|["']$/.test(uri),
+    },
+  };
+}
+
+export async function handle(ctx, fn) {
   try {
     return json({ total: await fn() });
   } catch (err) {
     console.error('visit counter failed:', err);
-    return json({ error: 'database unavailable' }, 503);
+    return json({ error: 'database unavailable', ...diagnose(err, ctx.env.MONGODB_URI) }, 503);
   }
 }
