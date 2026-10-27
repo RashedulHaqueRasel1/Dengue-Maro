@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler pages dev --port 8787",
-    "build": "echo 'no build step: the API is built separately in ./api'"
+    "dev": "node init && wrangler pages dev --port 8787",
+    "build": "node init && echo 'no build step: the API is built separately in ./api'"
   },
   "repository": {
     "type": "git",

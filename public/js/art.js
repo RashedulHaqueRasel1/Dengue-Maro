@@ -123,6 +123,7 @@ export function renderBackground(L, dpr) {
   drawCalendar(g, L);
   drawClock(g, L);
   drawSwitch(g, L);
+  drawWallFrames(g, L);
 
   // slippers
   const sx = L.man.x + L.man.w * 0.6, sy = fy + (H - fy) * 0.75;
@@ -338,6 +339,90 @@ function drawClock(g, L) {
   g.font = `700 ${Math.round(r * 0.28)}px ${FONT_BN}`;
   g.textAlign = 'center';
   g.fillText('দুপুর', x, y + r * 0.42);
+  g.textAlign = 'left';
+}
+
+// ---------------------------------------------------------------- meme frames on the wall
+// Pictures come from main.js (img/wall/wall.json, or the uncle's photos as a fallback).
+let wallPics = [];
+export function setWallPics(list) { wallPics = list.filter(p => p.img && p.img.complete && p.img.naturalWidth); }
+
+// Find up to two free spots on the wall that don't cover the window, calendar, clock,
+// fan, bed or the HUD, so the frames fit any screen shape.
+function frameSpots(L) {
+  // full size first; on cramped screens retry with smaller frames
+  for (const k of [1, 0.75, 0.55]) {
+    const spots = frameSpotsAt(L, Math.max(70, Math.min(L.W * 0.3, 190) * k));
+    if (spots.length) return spots;
+  }
+  return [];
+}
+function frameSpotsAt(L, fw) {
+  const { W, u } = L, f = 9 * u;
+  const fh = fw * 0.82;
+  const pad = 12 * u;
+  const blocks = [
+    { x: L.win.x - f * 2.6, y: 0, w: L.win.w + f * 5.2, h: L.win.y + L.win.h + f * 3 + L.pot.w * 1.4 },
+    { x: L.cal.x - pad, y: L.cal.y - 10 * u, w: L.cal.w + pad * 2, h: L.cal.h * 1.15 + 70 * u },
+    { x: L.clock.x - L.clock.r - pad, y: L.clock.y - L.clock.r - pad, w: L.clock.r * 2 + pad * 2, h: L.clock.r * 2 + pad * 2 },
+    { x: L.fan.x - L.fan.r, y: 0, w: L.fan.r * 2, h: L.fan.y + L.fan.r * 0.3 },
+    { x: L.man.x, y: L.man.y + L.man.h * 0.08, w: L.man.w, h: L.man.h },
+    { x: 0, y: 0, w: W, h: 118 },
+  ];
+  const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  const top = 118, bottom = Math.min(L.floorY, L.man.y + L.man.h * 0.08) - fh - 10 * u;
+  const spots = [];
+  // try the middle of the free wall band first, then work outwards
+  for (const fy of [0.5, 0.35, 0.65, 0.2, 0.8, 0.05, 0.95]) {
+    if (spots.length === 2) break;
+    const y = top + (bottom - top) * fy;
+    for (let col = 0; col <= 8; col++) {
+      const x = W * 0.04 + ((W * 0.92 - fw) * col) / 8;
+      const r = { x: x - pad, y: y - pad, w: fw + pad * 2, h: fh + pad * 2 };
+      if (y < top || y > bottom || blocks.some(b => hit(r, b)) || spots.some(s => hit(r, s))) continue;
+      spots.push({ x, y, w: fw, h: fh });
+      if (spots.length === 2) break;
+    }
+  }
+  return spots;
+}
+
+function drawWallFrames(g, L) {
+  if (!wallPics.length) return;
+  const u = L.u;
+  frameSpots(L).forEach((s, i) => {
+    const p = wallPics[i % wallPics.length], rot = i % 2 ? 0.05 : -0.04;
+    const cx = s.x + s.w / 2;
+    // nail + string
+    g.strokeStyle = 'rgba(60,35,10,.7)'; g.lineWidth = 1.4 * u;
+    g.beginPath(); g.moveTo(cx - s.w * 0.3, s.y + 4 * u); g.lineTo(cx, s.y - 22 * u); g.lineTo(cx + s.w * 0.3, s.y + 4 * u); g.stroke();
+    g.fillStyle = '#4a4a4a'; g.beginPath(); g.arc(cx, s.y - 22 * u, 2.6 * u, 0, TAU); g.fill();
+    g.save();
+    g.translate(cx, s.y + s.h / 2); g.rotate(rot); g.translate(-s.w / 2, -s.h / 2);
+    g.fillStyle = 'rgba(40,20,0,.32)'; g.fillRect(5 * u, 7 * u, s.w, s.h);
+    const gr = g.createLinearGradient(0, 0, s.w, s.h);
+    gr.addColorStop(0, '#8a5a2b'); gr.addColorStop(0.5, '#b07a3e'); gr.addColorStop(1, '#6b4220');
+    g.fillStyle = gr; g.fillRect(0, 0, s.w, s.h);
+    const m = 7 * u, iw = s.w - m * 2, ih = s.h - m * 2;
+    g.fillStyle = '#111'; g.fillRect(m, m, iw, ih);
+    g.save(); g.beginPath(); g.rect(m, m, iw, ih); g.clip();
+    const sc = Math.max(iw / p.img.naturalWidth, ih / p.img.naturalHeight);
+    g.drawImage(p.img, m + (iw - p.img.naturalWidth * sc) / 2, m + (ih - p.img.naturalHeight * sc) * (p.focusY ?? 0.35),
+      p.img.naturalWidth * sc, p.img.naturalHeight * sc);
+    if (p.caption) {
+      const fs = Math.max(11, Math.round(ih * 0.15));
+      g.font = `700 ${fs}px ${FONT_FUN}`; g.textAlign = 'center'; g.textBaseline = 'alphabetic'; g.lineJoin = 'round';
+      let size = fs;
+      while (size > 9 && g.measureText(p.caption).width > iw * 0.94) { size--; g.font = `700 ${size}px ${FONT_FUN}`; }
+      g.lineWidth = size * 0.28; g.strokeStyle = '#000'; g.strokeText(p.caption, m + iw / 2, m + ih - size * 0.45);
+      g.fillStyle = '#fff'; g.fillText(p.caption, m + iw / 2, m + ih - size * 0.45);
+    }
+    g.restore();
+    // glass glare
+    g.fillStyle = 'rgba(255,255,255,.08)';
+    g.beginPath(); g.moveTo(m, m); g.lineTo(m + iw * 0.45, m); g.lineTo(m, m + ih * 0.6); g.closePath(); g.fill();
+    g.restore();
+  });
   g.textAlign = 'left';
 }
 

@@ -27,7 +27,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atma:wght@600;700&family=Mina:wght@400;700&family=Noto+Sans+Bengali:wght@500;700&family=Tiro+Bangla&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=8">
+<link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 <div id="app">
@@ -64,6 +64,7 @@
       <h1 class="title">ডেঙ্গু থাপ্পড় বাজ</h1>
       <div class="subtitle">DENGUE SLAP MASTER</div>
       <p class="tagline">মশা মারতে কামান লাগে না,<br>একটা <b>থাপ্পড়ই</b> যথেষ্ট! 👋</p>
+      <div id="challengeLine" class="challenge-line hidden"></div>
       <button id="btnStart" class="btn btn-big btn-block">থাপ্পড় শুরু করেন 👋</button>
       <div id="bestLine" class="best-line"></div>
       <div id="visitLine" class="visit-line hidden"><span class="dot"></span>মোট ভিজিট <b id="visitCount">০</b></div>
@@ -75,7 +76,10 @@
         <li><span class="ico">👑</span><p><b>মশা সর্দার</b>৬ থাপ্পড় লাগবে!</p></li>
         <li class="wide"><span class="ico">🌀</span><p><b>পাওয়ার-আপ</b>🌀 কয়েল · 🧴 ক্রিম · ⚡ ব্যাট · 🥥 ডাব</p></li>
       </ul>
-      <button id="btnShareStart" class="btn btn-blue btn-sm btn-block">📢 বন্ধুদের চ্যালেঞ্জ দিন</button>
+      <div class="start-actions">
+        <button id="btnBoardStart" class="btn btn-gold btn-sm">🏆 লিডারবোর্ড</button>
+        <button id="btnShareStart" class="btn btn-blue btn-sm">📢 চ্যালেঞ্জ দিন</button>
+      </div>
       <div class="foot">💧 জমা পানি ফেলুন, ডেঙ্গু ঠেকান · <a href="#" id="lnkCredits">ক্রেডিট</a></div>
     </div>
   </section>
@@ -94,8 +98,42 @@
   <section id="scrCredits" class="screen hidden">
     <div class="card small">
       <h2 class="title sm">ক্রেডিট</h2>
-      <p class="credits">সব মিম ভয়েস আর সাউন্ডের কৃতিত্ব মূল নির্মাতাদের।<br><br>ডেঙ্গু তথ্য সাধারণ সচেতনতার জন্য, চিকিৎসার জন্য ডাক্তারের পরামর্শ নিন। স্বাস্থ্য বাতায়ন: <b>১৬২৬৩</b></p>
+      <div class="author">
+        <div class="author-label">Author</div>
+        <div class="author-name">Rashedul Haque Rasel</div>
+        <a class="author-link" href="mailto:rashedulhaquerasel1@gmail.com"><span class="ai mail">✉</span>rashedulhaquerasel1@gmail.com</a>
+        <a class="author-link" href="https://github.com/RashedulHaqueRasel1/Dengue-Maro" target="_blank" rel="noopener"><span class="ai gh">GH</span>GitHub · Dengue-Maro</a>
+        <a class="author-link" href="https://www.linkedin.com/in/rashedul-haque-rasel/" target="_blank" rel="noopener"><span class="ai li">in</span>LinkedIn · rashedul-haque-rasel</a>
+        <a class="author-link" href="https://www.facebook.com/Rashedul.haque.Rase1/" target="_blank" rel="noopener"><span class="ai fb">f</span>Facebook · Rashedul.haque.Rase1</a>
+      </div>
+      <p class="credits">ডেঙ্গু তথ্য সাধারণ সচেতনতার জন্য, চিকিৎসার জন্য ডাক্তারের পরামর্শ নিন। স্বাস্থ্য বাতায়ন: <b>১৬২৬৩</b></p>
       <button id="btnCreditsBack" class="btn btn-ghost">ফিরে যান</button>
+    </div>
+  </section>
+
+  <!-- NAME (asked before a game from the home screen) -->
+  <section id="scrName" class="screen hidden">
+    <form id="nameForm" class="card small name-card" autocomplete="off">
+      <div class="name-emoji">🖐️🦟</div>
+      <h2 class="title sm">আপনার নাম?</h2>
+      <p class="name-sub">লিডারবোর্ডে এই নামেই দেখাবে 🏆</p>
+      <input id="nameInput" class="name-input" type="text" maxlength="20" placeholder="যেমন:রহিম" enterkeyhint="go" required>
+      <div id="nameError" class="name-error"></div>
+      <button type="submit" class="btn btn-big btn-block">থাপ্পড় শুরু 👋</button>
+      <button type="button" id="btnNameBack" class="btn btn-ghost btn-sm">ফিরে যান</button>
+    </form>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section id="scrBoard" class="screen hidden">
+    <div class="card board-card">
+      <h2 class="title sm">লিডারবোর্ড 🏆</h2>
+      <p class="board-sub">সবচেয়ে বেশি মশা মেরেছে কে?</p>
+      <div class="board-head"><span>#</span><span>নাম</span><span>🦟 মশা</span><span>পয়েন্ট</span></div>
+      <ol id="boardList" class="board-list"></ol>
+      <div id="boardMe" class="board-row board-me-row hidden"></div>
+      <nav id="boardPager" class="board-pager hidden" aria-label="লিডারবোর্ডের পেজ"></nav>
+      <button id="btnBoardBack" class="btn btn-ghost btn-block">← ফিরে যান</button>
     </div>
   </section>
 
@@ -105,18 +143,20 @@
       <h2 class="title sm">শেয়ার করুন 📢</h2>
       <p class="share-sub">বন্ধুদের চ্যালেঞ্জ দিন, কে বেশি মশা মারতে পারে!</p>
       <img id="sharePreview" class="share-preview" alt="স্কোর কার্ড">
-      <div class="share-grid">
+      <div id="shareGrid" class="share-grid">
         <a id="shFb" class="sh fb" target="_blank" rel="noopener"><span>f</span>ফেসবুক</a>
         <a id="shWa" class="sh wa" target="_blank" rel="noopener"><span>✆</span>হোয়াটসঅ্যাপ</a>
         <a id="shMs" class="sh ms" target="_blank" rel="noopener"><span>⚡</span>মেসেঞ্জার</a>
         <a id="shX" class="sh x" target="_blank" rel="noopener"><span>𝕏</span>এক্স</a>
         <a id="shTg" class="sh tg" target="_blank" rel="noopener"><span>➤</span>টেলিগ্রাম</a>
         <button id="shCopy" class="sh cp"><span>🔗</span>লিংক কপি</button>
-        <button id="shDl" class="sh dl"><span>⬇</span>ছবি সেভ</button>
         <button id="shNative" class="sh nt"><span>📤</span>আরো…</button>
       </div>
       <div id="shareToast" class="toast"></div>
-      <button id="btnShareBack" class="btn btn-ghost">ফিরে যান</button>
+      <div class="share-actions">
+        <button id="btnShareBack" class="btn btn-ghost">← ফিরে যান</button>
+        <button id="shDl" class="btn btn-save">⬇ ছবি সেভ করুন</button>
+      </div>
     </div>
   </section>
 
@@ -145,16 +185,18 @@
         <div><b id="stAcc">০%</b><span>নিশানা</span></div>
         <div><b id="stTime">০</b><span>সেকেন্ড টিকেছেন</span></div>
       </div>
+      <div id="ovRank" class="ov-rank hidden"></div>
       <p id="ovSatire" class="satire"></p>
       <div class="tip"><b>🩺 জনস্বার্থে:</b> <span id="ovTip"></span></div>
       <div class="btns">
         <button id="btnAgain" class="btn">আবার থাপ্পড় 👋</button>
-        <button id="btnShare" class="btn btn-blue">শেয়ার 📤</button>
-        <button id="btnHome" class="btn btn-ghost">হোম</button>
+        <button id="btnShare" class="btn btn-blue">শেয়ার</button>
+        <button id="btnBoardOver" class="btn btn-gold">লিডারবোর্ড</button>
+        <button id="btnSaveOver" class="btn btn-save">ছবি সেভ</button>
       </div>
     </div>
   </section>
 </div>
-<script type="module" src="js/main.js?v=8"></script>
+<script type="module" src="js/main.js?v=22"></script>
 </body>
 </html>
