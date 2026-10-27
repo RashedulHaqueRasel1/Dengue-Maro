@@ -4,16 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npm run build && wrangler pages dev --port 8787",
-    "build": "wrangler pages functions build --compatibility-flags nodejs_compat --compatibility-date 2026-09-01 --outdir public/_worker.js",
-    "deploy": "npm run build && wrangler pages deploy"
+    "dev": "wrangler pages dev --port 8787",
+    "build": "echo 'no build step: the API is built separately in ./api'"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/RashedulHaqueRasel1/Dengue-Maro.git"
-  },
-  "dependencies": {
-    "mongodb": "^7.7.0"
   },
   "devDependencies": {
     "wrangler": "^4.152.0"

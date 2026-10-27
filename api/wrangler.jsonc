@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Built by Workers Builds with this folder's wrangler 4 (the Pages build image's older
+  // wrangler can't bundle the mongodb driver). Only reachable via the Pages service binding.
+  "name": "dengue-maro-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": { "enabled": true }
+}
