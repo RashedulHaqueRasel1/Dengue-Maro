@@ -17,7 +17,7 @@ async function hashIp(ip, salt) {
 }
 
 // Workers can't share sockets between requests, so each request opens its own short-lived client.
-async function withDb(ctx, fn) {
+export async function withDb(ctx, fn) {
   const { env, waitUntil } = ctx;
   if (!env.MONGODB_URI) throw new Error('MONGODB_URI not configured');
   const client = new MongoClient(env.MONGODB_URI, { maxPoolSize: 1, serverSelectionTimeoutMS: 8000 });

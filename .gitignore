@@ -4,4 +4,7 @@ api/node_modules/
 # local secrets (MongoDB connection string) — never commit
 .dev.vars
 api/.dev.vars
-.env
+
+# original GIFs the wall images were cut from (large; not deployed)
+assets-src/
+config.bat
