@@ -1,11 +1,13 @@
 // Sound engine: meme voice clips (mp3) + Web Audio synth effects.
 const FILES = [
-  'rag-korla', 'ei-dhongi', 'amar-vul', 'masud', 'bindaya-dimu', 'kar-pola',
+  'rag-korla', 'ei-dhongi', 'amar-vul', 'masud', 'bindaya-dimu',
   'tui-beshi-janos', 'maaf-koira-dilam', 'bishwas-kori-na', 'osombhob', 'baaah',
   'o-ki-lagche', 'dhoka-khaichi', 'goribera', 'shakchunni-laugh', 'koun-hai-re',
-  'hae-thikase', 'unnoyon', 'helicopter-milon', 'aaho-bhatija', 'pure-debo',
+  'hae-thikase', 'unnoyon', 'helicopter-milon', 'aaho-bhatija',
+  'chalo', 'aayein-meme', 'are-baap-re-yaad-aya', 'yamate-kudashai', 'maa-tari-oo-bhai',
+  'gopgopgop', '999-social-credit-siren',
   'slap1', 'slap2', 'slap3', 'slap-oh', 'slap-big', 'punch',
-  'mosquito-buzz', 'mosquito-ear', 'mosquito-laugh', 'goofy-horn',
+  'mosquito-buzz', 'mosquito-ear', 'mosquito-laugh', 'goofy-horn', 'mac-quack', 'dry-fart',
 ];
 
 const pick = a => a[Math.floor(Math.random() * a.length)];

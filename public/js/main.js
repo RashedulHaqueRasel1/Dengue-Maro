@@ -1,5 +1,5 @@
-import { sound } from './audio.js?v=4';
-import * as art from './art.js?v=4';
+import { sound } from './audio.js?v=9';
+import * as art from './art.js?v=5';
 
 const $ = id => document.getElementById(id);
 const cv = $('cv'), ctx = cv.getContext('2d');
@@ -273,7 +273,7 @@ function slap(px, py) {
     if (Math.hypot(px - L.head.x, py - L.head.y) < L.head.r * 1.3) slapUncle(true);
     else if (G.missStreak % 4 === 0) {
       addText(px, py - 30 * L.u, pick(['নিশানা কই?', 'বাতাসে থাপ্পড়!', 'মশা হাসতেছে 😂']), { color: '#ffb4b4', size: 20 });
-      if (!sound.voice(['rag-korla', 'tui-beshi-janos', 'maaf-koira-dilam'], 1)) sound.clip('goofy-horn', { vol: 0.6 });
+      if (!sound.voice(['rag-korla', 'tui-beshi-janos', 'maaf-koira-dilam', 'aayein-meme'], 1, 3)) sound.clip(pick(['goofy-horn', 'mac-quack', 'dry-fart']), { vol: 0.7 });
     }
     // near misses make mosquitoes dodge
     for (const m of G.mosq) {
@@ -323,6 +323,7 @@ function slapUncle(miss) {
   if (miss) {
     addText(L.head.x + L.head.r, L.head.y - L.head.r * 1.6, pick(['আমারে মারো ক্যান?!', 'উফ! মশা না, আমি!', 'ঘুমাইতে দাও!']), { color: '#fff', size: 18, life: 1.3 });
     sound.clip('slap-oh', { vol: 0.9 });
+    setTimeout(() => sound.voice(['yamate-kudashai', 'are-baap-re-yaad-aya', 'aayein-meme'], 2, 2.6), 250);
     vibrate(60);
   } else if (Math.random() < 0.5) {
     addText(L.head.x + L.head.r, L.head.y - L.head.r * 1.6, 'মামাও খাইলো! 😵', { color: '#fff', size: 18, life: 1.2 });
@@ -385,7 +386,7 @@ function collect(it) {
   } else if (it.kind === 'bat') {
     G.bat = 8;
     banner('⚡ ইলেকট্রিক ব্যাট!<small>এক থাপ্পড়ে চারপাশ সাফ</small>');
-    sound.voice('pure-debo', 2);
+    sound.voice('chalo', 2, 2.5);
   } else if (it.kind === 'dab') {
     if (G.lives < 3) { G.lives++; banner('🥥 ডাবের পানি! +১ ❤️<small>ডেঙ্গুতে প্রচুর তরল খান</small>'); }
     else { G.score += 5; banner('🥥 ডাবের পানি! +৫'); }
@@ -409,7 +410,7 @@ function bitten(m) {
     if (S.bites.length > 12) S.bites.shift();
     vibrate(200);
     sound.hurt();
-    sound.voice(['ei-dhongi', 'o-ki-lagche', 'dhoka-khaichi'], 3);
+    sound.voice(['ei-dhongi', 'o-ki-lagche', 'dhoka-khaichi', 'gopgopgop'], 3, 3.5);
     addText(m.x, m.y - m.size * 2, `কামড়! ${L.targets[m.tgt].name} 🩸`, { color: '#ff4d4d', size: 24, life: 1.1 });
     const lv = $('lives');
     lv.classList.remove('hurt'); void lv.offsetWidth; lv.classList.add('hurt');
@@ -573,8 +574,8 @@ function update(dt) {
       G.nextBoss += 60;
       say(spawn('boss', pick(['left', 'right'])), 'boss', true);
       banner('⚠️ মশা সর্দার আসছে! ⚠️<small>৬ থাপ্পড় লাগবে</small>');
-      sound.voice(['kar-pola', 'koun-hai-re'], 3);
-      sound.clip('mosquito-ear', { vol: 0.6, maxDur: 3 });
+      sound.voice(['maa-tari-oo-bhai', 'koun-hai-re'], 3, 3.5);
+      sound.clip('999-social-credit-siren', { vol: 0.45, maxDur: 2.8 });
     }
     if ((G.itemT -= dt) <= 0) { G.itemT = rand(14, 22); spawnItem(); }
     for (const it of G.items) {
@@ -706,7 +707,7 @@ function updatePowers() {
 }
 
 function show(id) {
-  for (const s of ['scrStart', 'scrPause', 'scrOver', 'scrCredits', 'scrShare']) $(s).classList.toggle('hidden', s !== id);
+  for (const s of ['scrStart', 'scrPause', 'scrOver', 'scrCredits', 'scrShare', 'scrName', 'scrBoard']) $(s).classList.toggle('hidden', s !== id);
   $('hud').classList.toggle('hidden', !(G.state === 'play' || G.state === 'dying' || G.state === 'paused'));
   cv.style.cursor = G.state === 'play' ? 'none' : 'default';
 }
@@ -727,7 +728,7 @@ function startGame() {
   sound.click();
   resetGame();
   show(null);
-  setTimeout(() => sound.voice(['goribera', 'helicopter-milon'], 2), 250);
+  setTimeout(() => sound.voice(['goribera', 'helicopter-milon', 'chalo'], 2), 250);
   banner('মশা আসছে! 🦟<small>মামার ঘুম বাঁচান</small>');
 }
 
@@ -759,7 +760,7 @@ function gameOver() {
   const newBest = G.score > best;
   if (newBest) { best = G.score; store.set('dsm_best', best); }
   sound.sadTrombone();
-  setTimeout(() => sound.voice(newBest && G.score > 0 ? 'osombhob' : ['masud', 'amar-vul'], 5, 6), 1500);
+  setTimeout(() => sound.voice(newBest && G.score > 0 ? 'osombhob' : ['masud', 'amar-vul', 'maa-tari-oo-bhai'], 5, 6), 1500);
   const acc = G.slaps ? Math.round((G.hits / G.slaps) * 100) : 0;
   lastResult = { score: G.score, kills: G.kills, combo: G.maxCombo, acc, time: Math.round(G.t), headline: headlineFor(G.kills), newBest };
   let date = '';
@@ -768,12 +769,14 @@ function gameOver() {
   $('ovHeadline').textContent = lastResult.headline;
   $('ovScore').textContent = bn(G.score);
   $('ovBest').textContent = newBest && G.score > 0 ? '🏆 নতুন রেকর্ড!' : `রেকর্ড: ${bn(best)}`;
+  if (G.score > CHALLENGE) $('ovBest').textContent = FRIEND_SCORE ? `🎯 বন্ধুর ${bn(CHALLENGE)} হারাইছেন!` : `🎯 ${bn(CHALLENGE)} চ্যালেঞ্জ জিতলেন!`;
   $('stKills').textContent = bn(G.kills);
   $('stCombo').textContent = bn(G.maxCombo);
   $('stAcc').textContent = bn(acc) + '%';
   $('stTime').textContent = bn(lastResult.time);
-  $('ovSatire').textContent = pick(SATIRE);
+  $('ovSatire').textContent = lastResult.satire = pick(SATIRE);
   $('ovTip').textContent = pick(TIPS);
+  postScore(lastResult);
   show('scrOver');
   memeLast = -Infinity;
   setTimeout(() => showMeme('fever', newBest && G.score > 0 ? 'রেকর্ড ভাঙলো, কিন্তু মামার জ্বর 🤒' : 'মামা: আমি ঠিক আছি... 🤒'), 900);
@@ -786,6 +789,28 @@ const loadImg = src => { const im = new Image(); im.src = src; return im; };
 const FACE = loadImg('img/mama_face.webp');
 const FEVER_FACE = loadImg('img/mama_fever_face.webp');
 const NEWS = loadImg('img/news_photo.webp');
+// Meme frames on the wall: pictures listed in img/wall/wall.json ([{ "file", "caption" }]),
+// or the uncle's own photos with funny captions until some are added.
+const WALL_FALLBACK = [
+  { img: FACE, caption: 'ঘুমাইতে দেন ভাই! 😴', focusY: 0.4 },
+  { img: FEVER_FACE, caption: 'মশা মারেন, আমারে না!', focusY: 0.4 },
+];
+function refreshWall(list) {
+  art.setWallPics(list);
+  if (L) BG = art.renderBackground(L, DPR);
+}
+fetch('img/wall/wall.json')
+  .then(r => (r.ok ? r.json() : []))
+  .catch(() => [])
+  .then(list => {
+    const pics = (Array.isArray(list) ? list : []).filter(p => p && p.file)
+      .map(p => ({ img: loadImg('img/wall/' + p.file), caption: p.caption || '', focusY: p.focusY ?? 0.35 }));
+    // only two frames fit on the wall, so show a random pair each visit
+    for (let i = pics.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pics[i], pics[j]] = [pics[j], pics[i]]; }
+    const use = pics.length ? pics : WALL_FALLBACK;
+    use.forEach(p => p.img.addEventListener('load', () => refreshWall(use)));
+    refreshWall(use);
+  });
 let customMemes = [];
 fetch('img/meme/memes.json')
   .then(r => (r.ok ? r.json() : []))
@@ -877,67 +902,263 @@ const shareUrl = () => location.origin + location.pathname;
 const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 let shareBlob = null;
 
+// Funny rank shown on the saved poster, by score
+function rankFor(score) {
+  if (score <= 0) return { title: 'থাপ্পড় দিতে ভুলে গেছি 🤡', top: 'যখন মশা মারতে গিয়া নিজেরেই থাপ্পড় দেই:', bottom: 'মশা মরে নাই, আমার ইজ্জত মরছে' };
+  if (score < 20) return { title: 'নবিশ থাপ্পড়বাজ 🐣', top: 'যখন জীবনের প্রথম মশা মারি:', bottom: 'বাকি মশারা আমারে দেখে হাসতেছে 😂' };
+  if (score < 60) return { title: 'পাড়ার থাপ্পড় মাস্তান 😎', top: 'যখন এক থাপ্পড়ে মশার গুষ্টি শেষ:', bottom: 'এলাকার মশারা এখন সাবধান!' };
+  if (score < 150) return { title: 'থাপ্পড় সম্রাট 👑', top: 'মশারা যখন আমার নাম শুনে:', bottom: 'থাপ্পড়ের আওয়াজে ঢাকা কাঁপে!' };
+  return { title: 'মশার যম 💀', top: 'এইডিস সমাজের মিটিংয়ে আমার ছবি:', bottom: 'মশা সমাজ আমারে ব্যান করছে!' };
+}
+
+// Saved / shared image: the front page of "দৈনিক মশারি" (1080×1350, the size Facebook &
+// Instagram feeds show in full), lying on a desk.
 function buildCard(r) {
+  const W = 1080, H = 1350, INK = '#1f1b16', RED = '#b3121c';
   const c = document.createElement('canvas');
-  c.width = 1080; c.height = 1350;
+  c.width = W; c.height = H;
   const g = c.getContext('2d');
-  let gr = g.createLinearGradient(0, 0, 1080, 1350);
-  gr.addColorStop(0, '#ffe58a'); gr.addColorStop(0.5, '#ffb347'); gr.addColorStop(1, '#e8590c');
-  g.fillStyle = gr; g.fillRect(0, 0, 1080, 1350);
-  // newspaper sheet
+  const name = store.get('dsm_name', '');
+  const rank = r ? rankFor(r.score) : null;
+
+  // desk + paper sheet
+  let gr = g.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, '#5a3a22'); gr.addColorStop(1, '#2e1d10');
+  g.fillStyle = gr; g.fillRect(0, 0, W, H);
   g.save();
-  g.translate(540, 680); g.rotate(-0.02); g.translate(-540, -680);
-  g.shadowColor = 'rgba(60,20,0,.45)'; g.shadowBlur = 50; g.shadowOffsetY = 20;
-  g.fillStyle = '#f1e9d4'; g.fillRect(70, 70, 940, 1210);
+  g.translate(W / 2, H / 2); g.rotate(-0.008); g.translate(-W / 2, -H / 2);
+  const X = 26, Y = 22, PW = W - 52, PH = H - 44;
+  g.shadowColor = 'rgba(0,0,0,.55)'; g.shadowBlur = 40; g.shadowOffsetY = 14;
+  g.fillStyle = '#efe6cf'; g.fillRect(X, Y, PW, PH);
   g.shadowColor = 'transparent';
-  g.fillStyle = '#231f1a'; g.textAlign = 'center';
-  g.font = '600 26px "Noto Sans Bengali", sans-serif';
-  g.textAlign = 'left'; g.fillText('বিশেষ সংস্করণ', 110, 125);
-  g.textAlign = 'right'; g.fillText('মূল্য: এক থাপ্পড়', 970, 125);
+  // aged paper: warm edges, grain, a centre fold
+  gr = g.createRadialGradient(W / 2, H / 2, 300, W / 2, H / 2, 900);
+  gr.addColorStop(0, 'rgba(255,250,235,.55)'); gr.addColorStop(1, 'rgba(160,120,60,.22)');
+  g.fillStyle = gr; g.fillRect(X, Y, PW, PH);
+  for (let i = 0; i < 9000; i++) {
+    g.fillStyle = Math.random() < 0.5 ? 'rgba(90,60,20,.06)' : 'rgba(255,255,255,.08)';
+    g.fillRect(X + Math.random() * PW, Y + Math.random() * PH, 1.6, 1.6);
+  }
+  gr = g.createLinearGradient(0, H / 2 - 40, 0, H / 2 + 40);
+  gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(0.5, 'rgba(90,60,20,.12)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.fillRect(X, H / 2 - 40, PW, 80);
+
+  const L = 74, R = W - 74, CW = R - L;
+  const rule = (y, h = 2) => { g.fillStyle = INK; g.fillRect(L, y, CW, h); };
+  g.fillStyle = INK; g.textBaseline = 'alphabetic';
+
+  // top strip
+  let date = '';
+  try { date = new Date().toLocaleDateString('bn-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }); } catch (e) {}
+  g.font = '600 24px "Noto Sans Bengali", sans-serif';
+  g.textAlign = 'left'; g.fillText(date, L, 80);
+  g.textAlign = 'center'; g.fillText(r ? `বিশেষ সংস্করণ · সংখ্যা ${bn(r.score)}` : 'বিশেষ সংস্করণ', W / 2, 80);
+  g.textAlign = 'right'; g.fillText('মূল্য: এক থাপ্পড়', R, 80);
+  rule(94, 2);
+  // masthead
   g.textAlign = 'center';
-  g.font = '118px "Tiro Bangla", serif';
-  g.fillText('দৈনিক মশারি', 540, 250);
-  g.fillRect(110, 280, 860, 5); g.fillRect(110, 292, 860, 2);
-  if (r) {
-    g.fillStyle = '#c1121f'; g.fillRect(390, 318, 300, 52);
-    g.fillStyle = '#fff'; g.font = '700 34px "Noto Sans Bengali", sans-serif'; g.fillText('ব্রেকিং নিউজ', 540, 356);
-    g.fillStyle = '#231f1a'; g.font = '50px "Tiro Bangla", serif';
-    wrap(g, r.headline, 540, 440, 860, 66);
-  } else {
-    g.font = '56px "Tiro Bangla", serif';
-    wrap(g, 'ঘুমন্ত মামাকে বাঁচাতে এলাকায় থাপ্পড়বাজ খোঁজা হচ্ছে!', 540, 380, 860, 70);
-  }
+  g.font = '122px "Tiro Bangla", serif';
+  g.fillText('দৈনিক মশারি', W / 2, 212);
+  rule(234, 4); rule(242, 1.5);
+  g.font = '500 25px "Noto Sans Bengali", sans-serif';
+  g.fillText('মশা নয়, সত্য প্রকাশে আপসহীন  ·  ঢাকা থেকে প্রকাশিত', W / 2, 273);
+  rule(286, 1.5); rule(292, 4);
+
+  // breaking + headline
+  g.fillStyle = RED; g.fillRect(L, 314, 236, 46);
+  g.fillStyle = '#fff'; g.font = '700 28px "Noto Sans Bengali", sans-serif'; g.textAlign = 'center';
+  g.fillText('🔴 ব্রেকিং নিউজ', L + 118, 346);
+  g.fillStyle = INK; g.textAlign = 'left';
+  const headline = r ? r.headline : 'ঘুমন্ত মামাকে বাঁচাতে এলাকায় জরুরি ভিত্তিতে থাপ্পড়বাজ খোঁজা হচ্ছে!';
+  let hs = 62, lines;
+  do { g.font = `${hs}px "Tiro Bangla", serif`; lines = wrapLines(g, headline, CW); hs -= 2; } while (lines.length > 2 && hs > 40);
+  lines.forEach((t, i) => g.fillText(t, L, 424 + i * (hs + 18)));
+  let y = 424 + (lines.length - 1) * (hs + 18) + 44;
+  g.font = 'italic 500 25px "Noto Sans Bengali", sans-serif'; g.fillStyle = '#4a3f33';
+  g.fillText(name ? `নিজস্ব প্রতিবেদক  ·  থাপ্পড়বাজ: ${name}` : 'নিজস্ব প্রতিবেদক  ·  ঢাকা', L, y);
+  y += 22; rule(y, 1.5);
+
+  // lead photo (sepia print) with a rubber stamp
+  const py = y + 18, ph = 262;
+  g.fillStyle = '#d9cdb0'; g.fillRect(L - 6, py - 6, CW + 12, ph + 12);
   if (NEWS.complete && NEWS.naturalWidth) {
-    const pw = 860, ph = pw * NEWS.naturalHeight / NEWS.naturalWidth, py = r ? 580 : 520;
-    g.fillStyle = '#d9cfb6'; g.fillRect(110 - 6, py - 6, pw + 12, ph + 12);
-    g.drawImage(NEWS, 110, py, pw, ph);
-    g.fillStyle = '#3b342b'; g.font = '500 24px "Noto Sans Bengali", sans-serif'; g.textAlign = 'left';
-    g.fillText('ছবি: থাপ্পড়বাজের অপেক্ষায় জ্বরে কাতর মামা', 110, py + ph + 36);
-    g.textAlign = 'center';
+    g.save(); g.beginPath(); g.rect(L, py, CW, ph); g.clip();
+    g.filter = 'sepia(.45) contrast(1.12) saturate(.8)';
+    const s = Math.max(CW / NEWS.naturalWidth, ph / NEWS.naturalHeight);
+    g.drawImage(NEWS, L + (CW - NEWS.naturalWidth * s) / 2, py + (ph - NEWS.naturalHeight * s) * 0.45, NEWS.naturalWidth * s, NEWS.naturalHeight * s);
+    g.filter = 'none';
+    g.restore();
   }
-  if (r) {
-    g.fillStyle = '#c1121f'; g.font = '700 170px Mina, sans-serif';
-    g.fillText(bn(r.score), 540, 1110);
-    g.fillStyle = '#231f1a'; g.font = '700 38px "Noto Sans Bengali", sans-serif';
-    g.fillText(`পয়েন্ট · ${bn(r.kills)}টি মশা খতম · কম্বো ${bn(r.combo)}`, 540, 1170);
-  } else {
-    g.fillStyle = '#c1121f'; g.font = '700 64px Atma, sans-serif';
-    g.fillText('মশা মারতে কামান লাগে না,', 540, 1060);
-    g.fillText('একটা থাপ্পড়ই যথেষ্ট!', 540, 1140);
-  }
-  g.fillStyle = '#231f1a'; g.fillRect(110, 1200, 860, 3);
-  g.font = '700 36px Atma, sans-serif';
-  g.fillText('তুমি পারবা? খেলো: ' + location.host, 540, 1250);
+  g.font = '500 22px "Noto Sans Bengali", sans-serif'; g.fillStyle = '#3b342b'; g.textAlign = 'left';
+  g.fillText(r && r.kills > 0 ? 'ছবি: থাপ্পড়বাজের হাতে মশা নিধনের পর স্বস্তির ঘুমে মামা।  — নিজস্ব আলোকচিত্রী'
+    : 'ছবি: থাপ্পড়বাজের অপেক্ষায় ঘুমন্ত মামা।  — নিজস্ব আলোকচিত্রী', L, py + ph + 34);
+  g.save(); g.translate(R - 104, py + 96); g.rotate(-0.22);
+  g.strokeStyle = 'rgba(179,18,28,.85)'; g.fillStyle = 'rgba(179,18,28,.85)';
+  g.lineWidth = 7; g.beginPath(); g.arc(0, 0, 92, 0, Math.PI * 2); g.stroke();
+  g.lineWidth = 3; g.beginPath(); g.arc(0, 0, 78, 0, Math.PI * 2); g.stroke();
+  g.font = '700 36px Atma, sans-serif'; g.textAlign = 'center';
+  g.fillText(r && r.newBest ? 'নতুন' : 'থাপ্পড়', 0, -4); g.fillText(r && r.newBest ? 'রেকর্ড!' : 'বাজ ✓', 0, 38);
   g.restore();
-  // round stamp
-  g.save(); g.translate(890, r ? 650 : 590); g.rotate(-0.3);
-  g.strokeStyle = 'rgba(193,18,31,.85)'; g.lineWidth = 8;
-  g.beginPath(); g.arc(0, 0, 105, 0, Math.PI * 2); g.stroke();
-  g.beginPath(); g.arc(0, 0, 88, 0, Math.PI * 2); g.stroke();
-  g.fillStyle = 'rgba(193,18,31,.85)'; g.font = '700 40px Atma, sans-serif'; g.textAlign = 'center';
-  g.fillText(r && r.newBest ? 'নতুন' : 'থাপ্পড়', 0, -6); g.fillText(r && r.newBest ? 'রেকর্ড!' : 'বাজ', 0, 40);
+
+  // score + rank
+  y = py + ph + 50; rule(y, 2);
+  const ay = PH + Y - 108;
+  g.textAlign = 'left';
+  if (r) {
+    g.fillStyle = RED; g.font = '700 112px Mina, sans-serif';
+    g.fillText(bn(r.score), L, y + 114);
+    const sw = g.measureText(bn(r.score)).width;
+    g.fillStyle = INK; g.font = '700 34px "Noto Sans Bengali", sans-serif';
+    g.fillText('পয়েন্ট', L + sw + 14, y + 108);
+    const rx = L + Math.max(sw + 150, 380);
+    g.fillStyle = INK; g.fillRect(rx - 26, y + 18, 2, 100);
+    g.font = '600 26px "Noto Sans Bengali", sans-serif'; g.fillStyle = '#4a3f33';
+    g.fillText('র‍্যাংক', rx, y + 50);
+    g.font = '700 46px Atma, "Noto Sans Bengali", sans-serif'; g.fillStyle = INK;
+    fitText(g, rank.title, rx, y + 102, R - rx);
+    y += 134; rule(y, 1.5);
+    // stats
+    const stats = [[bn(r.kills), 'মশা খতম'], [bn(r.combo), 'সর্বোচ্চ কম্বো'], [bn(r.acc) + '%', 'নিশানা'], [bn(r.time), 'সেকেন্ড টিকেছেন']];
+    const cw = CW / 4;
+    stats.forEach(([v, l], i) => {
+      const cx = L + cw * i + cw / 2;
+      if (i) { g.fillStyle = 'rgba(31,27,22,.35)'; g.fillRect(L + cw * i, y + 12, 1.5, 74); }
+      g.fillStyle = INK; g.textAlign = 'center';
+      g.font = '700 42px Mina, sans-serif'; g.fillText(v, cx, y + 54);
+      g.font = '500 22px "Noto Sans Bengali", sans-serif'; g.fillText(l, cx, y + 84);
+    });
+    y += 98; rule(y, 1.5);
+    // a line of satire with a drop cap
+    const sat = r.satire || pick(SATIRE);
+    g.textAlign = 'left'; g.fillStyle = INK;
+    // only as many lines as fit above the ad
+    const room = Math.min(2, Math.floor((ay - 18 - (y + 40)) / 38) + 1);
+    if (room > 0) {
+      g.font = '60px "Tiro Bangla", serif';
+      // first grapheme (keeps Bengali conjuncts like প্র whole)
+      const seg = window.Intl && Intl.Segmenter ? [...new Intl.Segmenter('bn', { granularity: 'grapheme' }).segment(sat)].map(x => x.segment) : Array.from(sat);
+      const cap = seg[0], capW = g.measureText(cap).width + 10;
+      g.fillText(cap, L, y + 62);
+      g.font = '27px "Tiro Bangla", serif';
+      const body = wrapLines(g, seg.slice(1).join(''), CW - capW);
+      const shown = body.slice(0, room);
+      if (body.length > room) shown[room - 1] = shown[room - 1].replace(/\s*\S+$/, ' ...');
+      shown.forEach((t, i) => g.fillText(t, L + capW, y + 38 + i * 38));
+    }
+  } else {
+    g.fillStyle = INK; g.font = '48px "Tiro Bangla", serif'; g.textAlign = 'center';
+    g.fillText('মশা মারতে কামান লাগে না, একটা থাপ্পড়ই যথেষ্ট!', W / 2, y + 90);
+  }
+
+  // classified-ad box at the foot of the page: challenge on the left, link on the right
+  g.fillStyle = INK; g.fillRect(L, ay, CW, 84);
+  g.strokeStyle = '#efe6cf'; g.lineWidth = 2; g.setLineDash([8, 6]); g.strokeRect(L + 8, ay + 8, CW - 16, 68); g.setLineDash([]);
+  g.textBaseline = 'middle';
+  g.textAlign = 'left'; g.fillStyle = '#fff'; g.font = '700 36px Atma, "Noto Sans Bengali", sans-serif';
+  g.fillText(r ? 'তুমি পারবা আমাকে হারাতে? 😏' : 'থাপ্পড়বাজ চাই! 👋', L + 30, ay + 44);
+  g.textAlign = 'right'; g.fillStyle = '#ffd23f'; g.font = '700 28px Mina, "Noto Sans Bengali", sans-serif';
+  g.fillText('👉 ' + location.host, R - 30, ay + 44);
+  g.textBaseline = 'alphabetic';
   g.restore();
   return c;
+}
+function wrapLines(g, text, maxW) {
+  const out = []; let line = '';
+  for (const w of String(text).split(' ')) {
+    const t = line ? line + ' ' + w : w;
+    if (g.measureText(t).width > maxW && line) { out.push(line); line = w; } else line = t;
+  }
+  if (line) out.push(line);
+  return out;
+}
+function fitText(g, text, x, y, maxW) {
+  const m = g.font.match(/(\d+)px/), base = m ? +m[1] : 40;
+  let size = base;
+  while (size > 24 && g.measureText(text).width > maxW) { size -= 2; g.font = g.font.replace(/\d+px/, size + 'px'); }
+  g.fillText(text, x, y);
+}
+
+// 1200×630 link-preview card (the size Facebook / WhatsApp show best), uploaded per result
+function buildOgCard(r) {
+  const W = 1200, H = 630;
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  let gr = g.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, '#ffe58a'); gr.addColorStop(0.55, '#ffb347'); gr.addColorStop(1, '#e8590c');
+  g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  // sunburst behind the avatar
+  g.save(); g.translate(905, 300);
+  for (let i = 0; i < 18; i++) {
+    g.rotate(Math.PI / 9);
+    g.fillStyle = i % 2 ? 'rgba(255,255,255,.16)' : 'rgba(255,255,255,0)';
+    g.beginPath(); g.moveTo(0, 0); g.lineTo(700, -120); g.lineTo(700, 120); g.closePath(); g.fill();
+  }
+  g.restore();
+  // avatar
+  const face = FACE.complete && FACE.naturalWidth ? FACE : null;
+  g.save();
+  g.shadowColor = 'rgba(80,20,0,.45)'; g.shadowBlur = 40; g.shadowOffsetY = 14;
+  g.fillStyle = '#ffd23f'; g.beginPath(); g.arc(905, 300, 196, 0, Math.PI * 2); g.fill();
+  g.restore();
+  g.fillStyle = '#fff'; g.beginPath(); g.arc(905, 300, 184, 0, Math.PI * 2); g.fill();
+  if (face) {
+    g.save(); g.beginPath(); g.arc(905, 300, 172, 0, Math.PI * 2); g.clip();
+    const s = Math.max(344 / face.naturalWidth, 344 / face.naturalHeight) * 1.15;
+    g.drawImage(face, 905 - face.naturalWidth * s * 0.6, 300 - face.naturalHeight * s * 0.42, face.naturalWidth * s, face.naturalHeight * s);
+    g.restore();
+  }
+  emoji(g, '🖐️', 1080, 150, 120, 0.35);
+  emoji(g, '🦟', 760, 470, 84, -0.3);
+  g.save(); g.translate(1060, 470); g.rotate(-0.15);
+  g.font = '700 64px Atma, sans-serif'; g.textAlign = 'center'; g.lineJoin = 'round';
+  g.lineWidth = 12; g.strokeStyle = '#1d1a16'; g.strokeText('ঠাস!', 0, 0);
+  g.fillStyle = '#e63946'; g.fillText('ঠাস!', 0, 0);
+  g.restore();
+
+  // left column
+  g.textAlign = 'left'; g.textBaseline = 'alphabetic';
+  g.fillStyle = '#1d1a16'; rr2(g, 60, 52, 410, 58, 29); g.fill();
+  g.fillStyle = '#ffd23f'; g.font = '700 32px Atma, "Noto Sans Bengali", sans-serif';
+  g.fillText('ডেঙ্গু থাপ্পড় বাজ 👋', 86, 93);
+  g.font = '700 34px "Noto Sans Bengali", sans-serif'; g.fillStyle = '#3b1d05';
+  g.fillText(r.newBest ? '🏆 নতুন রেকর্ড! আমার স্কোর' : 'আমার থাপ্পড় স্কোর', 64, 175);
+  g.font = '700 210px Mina, sans-serif'; g.lineJoin = 'round';
+  g.lineWidth = 18; g.strokeStyle = '#fff'; g.strokeText(bn(r.score), 58, 368);
+  g.fillStyle = '#c1121f'; g.fillText(bn(r.score), 58, 368);
+  const sw = g.measureText(bn(r.score)).width;
+  g.font = '700 40px "Noto Sans Bengali", sans-serif'; g.fillStyle = '#3b1d05';
+  g.fillText('পয়েন্ট', 58 + sw + 18, 360);
+  g.font = '600 32px "Noto Sans Bengali", sans-serif'; g.fillStyle = '#3b1d05';
+  g.fillText(`🦟 ${bn(r.kills)}টা মশা খতম  ·  🔥 কম্বো ×${bn(r.combo)}`, 64, 428);
+  // challenge pill
+  g.fillStyle = '#c1121f'; rr2(g, 58, 470, 560, 76, 38); g.fill();
+  g.fillStyle = '#fff'; g.font = '700 38px Atma, "Noto Sans Bengali", sans-serif';
+  g.fillText('তুমি পারবা আমারে হারাইতে? 😏', 86, 521);
+  g.font = '700 26px Mina, "Noto Sans Bengali", sans-serif'; g.fillStyle = '#1d1a16';
+  g.fillText('▶ এখনই খেলো: ' + location.host, 64, 596);
+  return c;
+}
+function rr2(g, x, y, w, h, r) {
+  g.beginPath(); g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();
+}
+
+// Upload the card once per result and get a /s/<id> link whose preview is that card.
+async function makeShareLink(r) {
+  if (!r) return shareUrl();
+  if (r.link) return r.link;
+  try {
+    const blob = await new Promise(res => buildOgCard(r).toBlob(res, 'image/jpeg', 0.86));
+    const q = new URLSearchParams({ score: r.score, kills: r.kills, combo: r.combo });
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 8000);
+    const res = await fetch('/api/share?' + q, { method: 'POST', body: blob, headers: { 'content-type': 'image/jpeg' }, signal: ctl.signal });
+    clearTimeout(t);
+    if (!res.ok) throw new Error(res.status);
+    return (r.link = (await res.json()).url);
+  } catch (e) {
+    return shareUrl();
+  }
 }
 
 function shareText(r) {
@@ -971,7 +1192,24 @@ async function openShare(r, from) {
   const c = buildCard(r);
   $('sharePreview').src = c.toDataURL('image/jpeg', 0.85);
   shareBlob = await new Promise(res => c.toBlob(res, 'image/png'));
-  const url = shareUrl(), text = shareText(r);
+  setShareLinks(r, shareUrl());
+  $('shareToast').textContent = '';
+  show('scrShare');
+  if (r && !r.link) {
+    $('shareGrid').classList.add('busy');
+    toast('স্কোর কার্ডসহ লিংক তৈরি হচ্ছে... ⏳');
+  }
+  const link = await makeShareLink(r);
+  $('shareGrid').classList.remove('busy');
+  if (shareFrom === from) {
+    setShareLinks(r, link);
+    if (r) toast(link !== shareUrl() ? 'লিংক রেডি! শেয়ার করলে আপনার স্কোর কার্ড দেখাবে ✅' : '');
+  }
+}
+
+function setShareLinks(r, url) {
+  lastShare.url = url;
+  const text = shareText(r);
   const e = encodeURIComponent;
   $('shFb').href = `https://www.facebook.com/sharer/sharer.php?u=${e(url)}&quote=${e(text)}`;
   $('shWa').href = `https://wa.me/?text=${e(text + ' ' + url)}`;
@@ -981,19 +1219,17 @@ async function openShare(r, from) {
   $('shMs').dataset.copy = isMobile ? '' : text + ' ' + url;
   $('shCopy').dataset.copy = text + ' ' + url;
   $('shNative').classList.toggle('hidden', !navigator.share);
-  $('shareToast').textContent = '';
-  show('scrShare');
 }
 
 async function nativeShare() {
-  const r = lastShare.r, url = shareUrl(), text = shareText(r);
+  const r = lastShare.r, url = lastShare.url || shareUrl(), text = shareText(r);
   const file = shareBlob && new File([shareBlob], 'dengue-thappor.png', { type: 'image/png' });
   try {
     if (file && navigator.canShare && navigator.canShare({ files: [file] })) await navigator.share({ files: [file], title: 'ডেঙ্গু থাপ্পড় বাজ', text: `${text} ${url}` });
     else await navigator.share({ title: 'ডেঙ্গু থাপ্পড় বাজ', text, url });
   } catch (e) {}
 }
-const lastShare = { r: null };
+const lastShare = { r: null, url: '' };
 
 function downloadCard() {
   if (!shareBlob) return;
@@ -1003,6 +1239,25 @@ function downloadCard() {
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   toast('ছবি সেভ হয়েছে! ফেসবুকে পোস্ট করুন 📸');
+}
+
+// Game-over "save picture": the same meme poster the share sheet makes, straight to a download
+async function saveResultImage() {
+  if (!lastResult) return;
+  sound.click();
+  const btn = $('btnSaveOver');
+  btn.disabled = true;
+  await document.fonts.ready;
+  const blob = await new Promise(res => buildCard(lastResult).toBlob(res, 'image/png'));
+  btn.disabled = false;
+  if (!blob) return;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `dengue-thappor-${lastResult.score}.png`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  btn.textContent = 'সেভ হয়েছে ✅';
+  setTimeout(() => (btn.textContent = 'ছবি সেভ'), 2200);
 }
 
 function wrap(g, text, x, y, maxW, lh) {
@@ -1020,9 +1275,9 @@ function wrap(g, text, x, y, maxW, lh) {
 cv.addEventListener('pointerdown', e => { e.preventDefault(); slap(e.clientX, e.clientY); });
 cv.addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { G.ptr.x = e.clientX; G.ptr.y = e.clientY; G.ptr.mouse = true; } });
 cv.addEventListener('pointerleave', () => { G.ptr.mouse = false; });
-$('btnStart').addEventListener('click', startGame);
+$('btnStart').addEventListener('click', askName);
 $('btnAgain').addEventListener('click', startGame);
-$('btnHome').addEventListener('click', () => { sound.click(); goHome(); });
+$('btnSaveOver').addEventListener('click', saveResultImage);
 $('btnHome2').addEventListener('click', () => { sound.click(); goHome(); });
 $('btnShare').addEventListener('click', () => { lastShare.r = lastResult; openShare(lastResult, 'scrOver'); });
 $('btnShareStart').addEventListener('click', e => { e.preventDefault(); lastShare.r = null; openShare(null, 'scrStart'); });
@@ -1040,6 +1295,7 @@ const muteBtn = $('btnMute');
 function setMute(m) { sound.setMuted(m); store.set('dsm_mute', m); muteBtn.textContent = m ? '🔇' : '🔊'; }
 muteBtn.addEventListener('click', () => { sound.init(); setMute(!sound.muted); });
 window.addEventListener('keydown', e => {
+  if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
   if (e.key === 'm' || e.key === 'M') setMute(!sound.muted);
   if (e.key === 'Escape' || e.key === 'p') G.state === 'play' ? pause() : resume();
 });
@@ -1050,9 +1306,142 @@ setMute(store.get('dsm_mute', false));
 resize();
 goHome();
 requestAnimationFrame(frame);
-if (location.search.includes('debug')) window.__dsm = { G, S, update, resume, showMeme, makeMeme, get L() { return L; } };
+if (location.search.includes('debug')) window.__dsm = { G, S, update, resume, showMeme, makeMeme, openShare, buildOgCard, get L() { return L; } };
 // redraw background once Bangla fonts are ready (calendar / tag text)
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { BG = art.renderBackground(L, DPR); });
+
+// ------------------------------------------------------------------ player name + leaderboard
+// Each browser gets a private random id; the server keeps that player's best game.
+const PLAYER_ID = (() => {
+  let id = store.get('dsm_pid', '');
+  if (!/^[a-z0-9]{16}$/.test(id)) {
+    const a = new Uint8Array(16);
+    (window.crypto || {}).getRandomValues ? crypto.getRandomValues(a) : a.forEach((_, i) => (a[i] = Math.random() * 256));
+    id = [...a].map(b => 'abcdefghijklmnopqrstuvwxyz0123456789'[b % 36]).join('');
+    store.set('dsm_pid', id);
+  }
+  return id;
+})();
+const cleanName = v => Array.from(String(v || '').replace(/[\u0000-\u001f\u007f<>]/g, '').replace(/\s+/g, ' ').trim()).slice(0, 20).join('');
+
+function askName() {
+  sound.init();
+  sound.click();
+  $('nameInput').value = '';
+  $('nameError').textContent = '';
+  show('scrName');
+  setTimeout(() => $('nameInput').focus(), 350);
+}
+$('nameForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = cleanName($('nameInput').value);
+  if (!name) { $('nameError').textContent = 'নাম ছাড়া থাপ্পড় দেওয়া যাবে না! 😅'; $('nameInput').focus(); return; }
+  store.set('dsm_name', name);
+  $('nameInput').blur();
+  startGame();
+});
+$('btnNameBack').addEventListener('click', () => { sound.click(); show('scrStart'); });
+
+async function postScore(r) {
+  const name = store.get('dsm_name', ''), el = $('ovRank');
+  el.classList.add('hidden');
+  if (!name) return;
+  try {
+    const res = await fetch('/api/score', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: PLAYER_ID, name, score: r.score, kills: r.kills, combo: r.combo, time: r.time }),
+    });
+    if (!res.ok) return;
+    const d = await res.json();
+    el.innerHTML = d.improved && r.kills > 0
+      ? `🏆 লিডারবোর্ডে আপনি এখন <b>#${bn(d.rank)}</b>! নতুন সেরা খেলা 🎉`
+      : `🏆 লিডারবোর্ডে আপনার অবস্থান <b>#${bn(d.rank)}</b> (সেরা: ${bn(d.best.kills)}টা মশা)`;
+    el.classList.remove('hidden');
+  } catch (e) {}
+}
+
+let boardFrom = 'scrStart', boardPage = 1;
+function boardCells(el, cells) {
+  el.textContent = '';
+  cells.forEach(t => { const sp = document.createElement('span'); sp.textContent = t; el.appendChild(sp); });
+}
+function openBoard(from) {
+  sound.init();
+  sound.click();
+  boardFrom = from;
+  $('boardList').innerHTML = '';
+  show('scrBoard');
+  loadBoard(1);
+}
+// 5 players per page + your own position as the 6th row
+async function loadBoard(page) {
+  const list = $('boardList'), me = $('boardMe'), pager = $('boardPager');
+  boardPage = page;
+  // keep the current page visible (dimmed) while the next one loads, so the card doesn't jump
+  if (list.querySelector('.board-row')) list.classList.add('loading');
+  else list.innerHTML = '<li class="board-msg">লোড হচ্ছে... ⏳</li>';
+  pager.classList.add('busy');
+  try {
+    const res = await fetch(`/api/leaderboard?page=${page}&me=${PLAYER_ID}`);
+    if (!res.ok) throw new Error(res.status);
+    const d = await res.json();
+    if (boardPage !== page) return;
+    list.innerHTML = '';
+    if (!d.top.length) list.innerHTML = '<li class="board-msg">এখনো কেউ খেলেনি, প্রথম হওয়ার সুযোগ! 🥇</li>';
+    for (const row of d.top) {
+      const li = document.createElement('li');
+      li.className = 'board-row' + (row.me ? ' me' : '') + (row.rank <= 3 ? ' top' + row.rank : '');
+      boardCells(li, [row.rank <= 3 ? ['🥇', '🥈', '🥉'][row.rank - 1] : bn(row.rank), (row.me ? '👉 ' : '') + row.name, bn(row.kills), bn(row.score)]);
+      list.appendChild(li);
+    }
+    if (d.me) boardCells(me, [bn(d.me.rank), '👉 ' + d.me.name, bn(d.me.kills), bn(d.me.score)]);
+    else boardCells(me, ['–', '👉 আপনি এখনো খেলেননি', '–', '–']);
+    me.classList.remove('hidden');
+    renderPager(d.page, d.pages);
+  } catch (e) {
+    list.innerHTML = '<li class="board-msg">লিডারবোর্ড এখন লোড হচ্ছে না, একটু পরে চেষ্টা করুন 🙏</li>';
+    me.classList.add('hidden');
+  }
+  pager.classList.remove('busy');
+  list.classList.remove('loading');
+}
+// ‹ 1 … 4 5 6 … 20 ›
+function renderPager(page, pages) {
+  const nav = $('boardPager');
+  nav.textContent = '';
+  nav.classList.toggle('hidden', pages <= 1);
+  if (pages <= 1) return;
+  const btn = (label, target, cls = '') => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'pg ' + cls; b.textContent = label;
+    if (target == null || target === page) b.disabled = true;
+    else b.addEventListener('click', () => { sound.click(); loadBoard(target); });
+    if (target === page) b.setAttribute('aria-current', 'page');
+    nav.appendChild(b);
+  };
+  btn('‹', page > 1 ? page - 1 : null, 'arrow');
+  const nums = new Set([1, pages, page - 1, page, page + 1].filter(n => n >= 1 && n <= pages));
+  let prev = 0;
+  for (const n of [...nums].sort((a, b) => a - b)) {
+    if (n - prev > 1) btn('…', null, 'gap');
+    btn(bn(n), n, n === page ? 'on' : '');
+    prev = n;
+  }
+  btn('›', page < pages ? page + 1 : null, 'arrow');
+}
+$('btnBoardStart').addEventListener('click', () => openBoard('scrStart'));
+$('btnBoardOver').addEventListener('click', () => openBoard('scrOver'));
+$('btnBoardBack').addEventListener('click', () => { sound.click(); show(boardFrom); });
+
+// ------------------------------------------------------------------ challenge
+// Share links land on /?c=<friend's score>; everyone else gets the default target.
+const DEFAULT_CHALLENGE = 100;
+const FRIEND_SCORE = Math.min(1e6, Math.max(0, parseInt(new URLSearchParams(location.search).get('c'), 10) || 0));
+const CHALLENGE = FRIEND_SCORE || DEFAULT_CHALLENGE;
+$('challengeLine').innerHTML = FRIEND_SCORE
+  ? `🎯 বন্ধু পেয়েছে <b>${bn(CHALLENGE)}</b> পয়েন্ট, হারাইতে পারবা?`
+  : `🎯 চ্যালেঞ্জ: <b>${bn(CHALLENGE)}</b> পয়েন্ট পার করতে পারবা?`;
+$('challengeLine').classList.remove('hidden');
 
 // ------------------------------------------------------------------ visit counter
 // Counts one visit per browser session (refreshes don't inflate it); hides itself if the API is down.
